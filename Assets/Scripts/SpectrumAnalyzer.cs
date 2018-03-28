@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 
 [RequireComponent(typeof(AudioSource))]
 public class SpectrumAnalyzer : MonoBehaviour 
 {
 
     [SerializeField] private Transform _capsule;
+
+    [SerializeField] private bool _isUseMic = false;
+
+    public ReactiveProperty<Vector3> interaScale = new ReactiveProperty<Vector3>();
 
     public int resolution = 1024;
     public float lowFreqThreshold = 14700, midFreqThreshold = 29400, highFreqThreshold = 44100;
@@ -16,9 +22,14 @@ public class SpectrumAnalyzer : MonoBehaviour
     {
         audio_ = GetComponent<AudioSource>();
 
-        audio_.clip = Microphone.Start(null, true, 10, 44100);
-        // マイクが Ready になるまで待機（一瞬）
-        while (Microphone.GetPosition(null) <= 0) {}
+
+        if (_isUseMic)
+        {
+            audio_.clip = Microphone.Start(null, true, 10, 44100);
+            // マイクが Ready になるまで待機（一瞬）
+            while (Microphone.GetPosition(null) <= 0) {}
+        }
+        
 
         audio_.Play();
     }
@@ -40,6 +51,7 @@ public class SpectrumAnalyzer : MonoBehaviour
         mid  *= midEnhance;
         high *= highEnhance;
 
-        _capsule.localScale = new Vector3(high*50, mid*50, low*50);
+        // _capsule.localScale = new Vector3((1 + high) * 1.5f, (1 + mid) * 2, (1 + low) * 2);
+        interaScale.Value = new Vector3((1 + high) * 1.5f, (1 + mid) * 2, (1 + low) * 2);
     }
 }
