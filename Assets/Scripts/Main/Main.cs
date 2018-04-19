@@ -125,6 +125,7 @@ namespace vjt.Main
 			_01hippo.SetAlpha(_nanoKon.Slider1);
 			_02yurayura.SetAlpha(_nanoKon.Slider2);
 			_03kumo.SetAlpha(_nanoKon.Slider3);
+			_04text.SetAlpha(_nanoKon.Slider4);
 			_00glitch.SetColorDrift(_nanoKon.Slider5);
 			_00glitch.SetHorizontalShake(_nanoKon.Slider6);
 			_00glitch.SetVerticalJump(_nanoKon.Slider7);
@@ -164,7 +165,7 @@ namespace vjt.Main
 					_03kumo.SetAlpha(keyValue);
 					break;
 				case "Slider4":
-					_04text.SetValue(keyValue);
+					_04text.SetAlpha(keyValue);
 					break;
 				case "Slider5":
 					_00glitch.SetColorDrift(keyValue);

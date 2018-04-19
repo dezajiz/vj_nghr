@@ -57,6 +57,7 @@ namespace vjt.hippo
 		/// </summary>
 		private Color _matColor;
 
+		private List<MeshRenderer> renderers = new List<MeshRenderer>();
 
 		/// <summary>
 		/// 初期化
@@ -106,6 +107,7 @@ namespace vjt.hippo
 			for (int i = 0; i < _hippoList.Count; i++)
 			{
 				MeshRenderer meshrender = _hippoList[i].transform.Find("default").GetComponent<MeshRenderer>();
+				renderers.Add(meshrender);
 				_matColor = new Color(0, 0, 0, 0);
 				meshrender.material.color = _matColor;
 			}
@@ -132,9 +134,8 @@ namespace vjt.hippo
 			float value = (float)midiVal / 127;
 			for (int i = 0; i < _hippoList.Count; i++)
 			{
-				MeshRenderer meshrender = _hippoList[i].transform.Find("default").GetComponent<MeshRenderer>();
 				_matColor = new Color(_matColor.r, _matColor.g, _matColor.b, value);
-				meshrender.material.color = _matColor;
+				renderers[i].material.color = _matColor;
 			}
 		}
 
@@ -144,9 +145,8 @@ namespace vjt.hippo
 			float value = (float)col / 127;
 			for (int i = 0; i < _hippoList.Count; i++)
 			{
-				MeshRenderer meshrender = _hippoList[i].transform.Find("default").GetComponent<MeshRenderer>();
 				_matColor = new Color(value, _matColor.g, _matColor.b, _matColor.a);
-				meshrender.material.color = _matColor;
+				renderers[i].material.color = _matColor;
 			}
 		}
 		public void SetColorG(int col)
@@ -154,9 +154,8 @@ namespace vjt.hippo
 			float value = (float)col / 127;
 			for (int i = 0; i < _hippoList.Count; i++)
 			{
-				MeshRenderer meshrender = _hippoList[i].transform.Find("default").GetComponent<MeshRenderer>();
 				_matColor = new Color(_matColor.r, value, _matColor.b, _matColor.a);
-				meshrender.material.color = _matColor;
+				renderers[i].material.color = _matColor;
 			}
 
 		}
@@ -165,11 +164,9 @@ namespace vjt.hippo
 			float value = (float)col / 127;
 			for (int i = 0; i < _hippoList.Count; i++)
 			{
-				MeshRenderer meshrender = _hippoList[i].transform.Find("default").GetComponent<MeshRenderer>();
 				_matColor = new Color(_matColor.r, _matColor.g, value, _matColor.a);
-				meshrender.material.color = _matColor;
+				renderers[i].material.color = _matColor;
 			}
-
 		}
 
 

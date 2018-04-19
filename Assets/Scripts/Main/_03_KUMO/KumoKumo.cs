@@ -27,7 +27,8 @@ namespace vjt.kumo
 			_kumoParti.Stop();
 
 			_matColor = new Color(0, 0, 0, 0);
-			_kumoParti.startColor = _matColor;
+			var main = _kumoParti.main;
+			main.startColor = _matColor;
 		}
 
 
@@ -51,7 +52,8 @@ namespace vjt.kumo
 
 			float value = (float)midiVal / 127 * 15;
 			_matColor = new Color(_matColor.r, _matColor.g, _matColor.b, value);
-			_kumoParti.startColor = _matColor;
+			var main = _kumoParti.main;
+			main.startColor = _matColor;
 		}
 
 
@@ -59,19 +61,22 @@ namespace vjt.kumo
 		{
 			float value = (float)col / 127;
 			_matColor = new Color(value, _matColor.g, _matColor.b, _matColor.a);
-			_kumoParti.startColor = _matColor;
+			var main = _kumoParti.main;
+			main.startColor = _matColor;
 		}
 		public void SetColorG(int col)
 		{
 			float value = (float)col / 127;
 			_matColor = new Color(_matColor.r, value, _matColor.b, _matColor.a);
-			_kumoParti.startColor = _matColor;
+			var main = _kumoParti.main;
+			main.startColor = _matColor;
 		}
 		public void SetColorB(int col)
 		{
 			float value = (float)col / 127;
 			_matColor = new Color(_matColor.r, _matColor.g, value, _matColor.a);
-			_kumoParti.startColor = _matColor;
+			var main = _kumoParti.main;
+			main.startColor = _matColor;
 		}
 
 

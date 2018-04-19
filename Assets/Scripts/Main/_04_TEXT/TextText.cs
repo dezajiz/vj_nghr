@@ -20,7 +20,7 @@ namespace  vjt.Text
 		/// フェード
 		/// </summary>
 		/// <param name="midiVal"></param>
-		public void SetValue(int midiVal)
+		public void SetAlpha(int midiVal)
 		{
 			//
 			// 1以下ならdisactive
@@ -33,7 +33,6 @@ namespace  vjt.Text
 			gameObject.SetActive(true);
 
 			float alpha = (float)midiVal / 127;
-			float scale = alpha * 2.0f;
 
 			//
 			// マテリアルセット
