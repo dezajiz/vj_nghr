@@ -194,6 +194,8 @@ namespace vjt.hippo
 			_isRandomLine = false;
 		}
 
+		// TODO: S2M2R2でメッシュを変える
+		// TODO: SMRの3段階で並べる
 
 		/// <summary>
 		/// ランダムにちらす

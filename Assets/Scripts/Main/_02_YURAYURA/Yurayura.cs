@@ -41,6 +41,11 @@ namespace  vjt.yurayura
 		/// </summary>
 		private float _bangY = 20;
 
+		/// <summary>
+		/// メッシュレンダラー
+		/// </summary>
+		private MeshRenderer meshRenderer;
+
 
 		/// <summary>
 		/// 初期化
@@ -49,6 +54,8 @@ namespace  vjt.yurayura
 		{
 			_planeScale = new Vector3(0, 4, 4);
 			_plane.transform.localScale = _planeScale;
+
+			meshRenderer = _plane.GetComponent<MeshRenderer>();
 		}
 
 
@@ -75,10 +82,29 @@ namespace  vjt.yurayura
 
 			//
 			// マテリアルセット
-			MeshRenderer meshrender = _plane.GetComponent<MeshRenderer>();
-			meshrender.material = _targetMat;
+			meshRenderer.material = _targetMat;
 		}
 
+		/// <summary>
+		/// 色変更
+		/// </summary>
+		/// <param name="midiVal"></param>
+		public void SetColor(int midiVal)
+		{
+			float value = (float)midiVal / 127;
+			Color color = Color.HSVToRGB(value, 1, 1);
+			meshRenderer.material.color = color;
+		}
+
+		/// <summary>
+		/// こまかさ変更
+		/// </summary>
+		/// <param name="midiVal"></param>
+		public void SetFineness(int midiVal)
+		{
+			float value = (float)midiVal / 127 * 100;
+			meshRenderer.material.SetFloat("_Fineness", value);
+		}
 
 		/// <summary>
 		/// Bang

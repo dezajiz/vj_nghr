@@ -119,25 +119,6 @@ namespace vjt.Main
 			//
 			// rings
 			_rings.Init();
-
-
-			// 初期値の設定
-			_01hippo.SetAlpha(_nanoKon.Slider1);
-			_02yurayura.SetAlpha(_nanoKon.Slider2);
-			_03kumo.SetAlpha(_nanoKon.Slider3);
-			_04text.SetAlpha(_nanoKon.Slider4);
-			_00glitch.SetColorDrift(_nanoKon.Slider5);
-			_00glitch.SetHorizontalShake(_nanoKon.Slider6);
-			_00glitch.SetVerticalJump(_nanoKon.Slider7);
-			_00glitch.SetScanLineJitter(_nanoKon.Slider8);
-			_01hippo.SetColorR(_nanoKon.knob1);
-			_01hippo.SetColorG(_nanoKon.knob2);
-			_01hippo.SetColorB(_nanoKon.knob3);
-			_03kumo.SetColorR(_nanoKon.knob4);
-			_03kumo.SetColorG(_nanoKon.knob5);
-			_03kumo.SetColorB(_nanoKon.knob6);
-			_07blur.SetAlpha(_nanoKon.knob7);
-			_micInput.threshold = _nanoKon.knob8;
 		}
 
 
@@ -197,14 +178,15 @@ namespace vjt.Main
 					break;
 
 				case "Knob4":
-					_03kumo.SetColorR(keyValue);
+					_02yurayura.SetColor(_nanoKon.knob4);
 					break;
 
 				case "Knob5":
-					_03kumo.SetColorG(keyValue);
+					_02yurayura.SetFineness(keyValue);
 					break;
 
 				case "Knob6":
+					// TODO: 波の色相
 					_03kumo.SetColorB(keyValue);
 					break;
 
@@ -247,7 +229,7 @@ namespace vjt.Main
 		/// </summary>
 		void Update ()
 		{
-			//Debug.Log (nanoKontrol2.Slider1);
+			// Debug.Log (_nanoKon.Slider1);
 			//Debug.Log (nanoKontrol2.Slider2);
 			//Debug.Log (nanoKontrol2.knob1);
 			//Debug.Log (nanoKontrol2.knob2);
