@@ -9,6 +9,7 @@ using vjt.kumo;
 using vjt.blur;
 using vjt.glitch;
 using vjt.rings;
+using vjt.Text;
 
 namespace vjt.Main
 {
@@ -58,9 +59,13 @@ namespace vjt.Main
 		/// </summary>
 		[SerializeField] private KumoKumo _03kumo;
 
+		/// <summary>
+		/// 04 Text
+		/// </summary>
+		[SerializeField] private TextText _04text;
 
 		/// <summary>
-		/// 03 kumo
+		/// 07 blur
 		/// </summary>
 		[SerializeField] private BlurController _07blur;
 
@@ -114,6 +119,24 @@ namespace vjt.Main
 			//
 			// rings
 			_rings.Init();
+
+
+			// 初期値の設定
+			_01hippo.SetAlpha(_nanoKon.Slider1);
+			_02yurayura.SetAlpha(_nanoKon.Slider2);
+			_03kumo.SetAlpha(_nanoKon.Slider3);
+			_00glitch.SetColorDrift(_nanoKon.Slider5);
+			_00glitch.SetHorizontalShake(_nanoKon.Slider6);
+			_00glitch.SetVerticalJump(_nanoKon.Slider7);
+			_00glitch.SetScanLineJitter(_nanoKon.Slider8);
+			_01hippo.SetColorR(_nanoKon.knob1);
+			_01hippo.SetColorG(_nanoKon.knob2);
+			_01hippo.SetColorB(_nanoKon.knob3);
+			_03kumo.SetColorR(_nanoKon.knob4);
+			_03kumo.SetColorG(_nanoKon.knob5);
+			_03kumo.SetColorB(_nanoKon.knob6);
+			_07blur.SetAlpha(_nanoKon.knob7);
+			_micInput.threshold = _nanoKon.knob8;
 		}
 
 
@@ -140,8 +163,9 @@ namespace vjt.Main
 				case "Slider3":
 					_03kumo.SetAlpha(keyValue);
 					break;
-
-
+				case "Slider4":
+					_04text.SetValue(keyValue);
+					break;
 				case "Slider5":
 					_00glitch.SetColorDrift(keyValue);
 					break;
@@ -200,8 +224,6 @@ namespace vjt.Main
 		/// <param name="keyName"></param>
 		public void nanoKontrol2_keyPushed(string keyName)
 		{
-			// Debug.Log(keyName);
-
 			switch (keyName)
 			{
 				case "S1":
@@ -210,6 +232,10 @@ namespace vjt.Main
 
 				case "M1":
 					_01hippo.Seiretsu();
+					break;
+
+				case "S8":
+					_rings.Bang();
 					break;
 			}
 		}
@@ -237,7 +263,7 @@ namespace vjt.Main
 
 			_02yurayura.Bang();
 
-			_rings.Bang();
+			// _rings.Bang();
 		}
 	}
 }

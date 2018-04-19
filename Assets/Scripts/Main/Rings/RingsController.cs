@@ -20,7 +20,7 @@ namespace vjt.rings
 		public void Bang()
 		{
 			GameObject rings = Instantiate(_ringsPrefab);
-			rings.transform.parent = gameObject.transform;
+			rings.transform.SetParent(gameObject.transform);
 			rings.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 			rings.GetComponent<RectTransform>().localScale = Vector3.zero;
 			_ringsList.Add(rings);

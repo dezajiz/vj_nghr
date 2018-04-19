@@ -257,6 +257,4 @@ public class NanoKontrol2 : MonoBehaviour {
 		valueChangedFunctions = new List<valueChangedFunctionDelegate>();
 		keyPushedFunctions = new List<keyPushedFunctionDelegate>();
 	}
-
-
 }
