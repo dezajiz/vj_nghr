@@ -12,7 +12,13 @@ namespace vjt.hippo
 		/// <summary>
 		/// 対象オブジェクト
 		/// </summary>
-		public GameObject prefab;
+		public GameObject cube;
+
+		private Material cubeMat;
+
+		public GameObject sphere;
+
+		public GameObject capsule;
 
 		
 		/// <summary>
@@ -32,13 +38,6 @@ namespace vjt.hippo
 		/// </summary>
 		private int _totalNum;
 
-
-		/// <summary>
-		/// ランダム整列かどうか
-		/// </summary>
-		private bool _isRandomLine = true;
-
-
 		/// <summary>
 		/// 動き中か
 		/// </summary>
@@ -51,13 +50,41 @@ namespace vjt.hippo
 		/// <returns></returns>
 		private List<GameObject> _hippoList = new List<GameObject>();
 
-
 		/// <summary>
 		/// マテリアルのカラー
 		/// </summary>
 		private Color _matColor;
+		private HippoRotation[] _hippoScripts;
+		private MeshRenderer[] _rendererList;
+		private MeshFilter[] _meshList;
 
-		private List<MeshRenderer> renderers = new List<MeshRenderer>();
+		/// <summary>
+		/// メッシュのタイプ一覧
+		/// </summary>
+		private enum MESH_MODE{
+			CUBE,
+			CAPSULE,
+			SPHERE
+		};
+
+		/// <summary>
+		/// 並びのタイプ一覧
+		/// </summary>
+		private enum SEIRETSU_MODE{
+			KIREI,
+			AIDA,
+			KITANAI
+		}
+
+		/// <summary>
+		/// 現在のメッシュタイプ
+		/// </summary>
+		private MESH_MODE meshMode = MESH_MODE.CUBE;
+
+		/// <summary>
+		/// 現在の整列タイプ
+		/// </summary>
+		private SEIRETSU_MODE seiretsuMode = SEIRETSU_MODE.KIREI;
 
 		/// <summary>
 		/// 初期化
@@ -71,6 +98,11 @@ namespace vjt.hippo
 			//
 			// ランダム整列
 			cubePosition0 = new Vector3[_totalNum];
+			_hippoScripts = new HippoRotation[_totalNum];
+			_rendererList = new MeshRenderer[_totalNum];
+			_meshList = new MeshFilter[_totalNum];
+
+			Color defaultColor = new Color(0, 0, 0, 0);
 
 			for (int i = 0; i < _totalNum; i++) {
 				float radius = Random.Range(0.0f, 10);
@@ -85,8 +117,16 @@ namespace vjt.hippo
 
 				cubePosition0[i] = pos;
 
-				GameObject instance = Instantiate (prefab, pos, Quaternion.identity);
+				GameObject instance = Instantiate (cube, pos, Quaternion.identity);
 				instance.transform.parent = gameObject.transform;
+
+				MeshRenderer meshrender = instance.GetComponent<MeshRenderer>();
+				meshrender.material.color = defaultColor;
+
+				_hippoScripts[i] = instance.GetComponent<HippoRotation>();
+				_rendererList[i] = meshrender;
+				_meshList[i] = instance.GetComponent<MeshFilter>();
+
 				_hippoList.Add(instance);
 			}
 
@@ -102,15 +142,7 @@ namespace vjt.hippo
 				}
 			}
 
-			//
-			// はじめはアルファ０
-			for (int i = 0; i < _hippoList.Count; i++)
-			{
-				MeshRenderer meshrender = _hippoList[i].transform.Find("default").GetComponent<MeshRenderer>();
-				renderers.Add(meshrender);
-				_matColor = new Color(0, 0, 0, 0);
-				meshrender.material.color = _matColor;
-			}
+			gameObject.SetActive(false);
 		}
 
 
@@ -132,10 +164,11 @@ namespace vjt.hippo
 			// アルファセット
 			gameObject.SetActive(true);
 			float value = (float)midiVal / 127;
-			for (int i = 0; i < _hippoList.Count; i++)
+			_matColor = new Color(_matColor.r, _matColor.g, _matColor.b, value);
+
+			for (int i = 0; i < _totalNum; i++)
 			{
-				_matColor = new Color(_matColor.r, _matColor.g, _matColor.b, value);
-				renderers[i].material.color = _matColor;
+				_rendererList[i].material.color = _matColor;
 			}
 		}
 
@@ -143,82 +176,153 @@ namespace vjt.hippo
 		public void SetColorR(int col)
 		{
 			float value = (float)col / 127;
-			for (int i = 0; i < _hippoList.Count; i++)
+			_matColor = new Color(value, _matColor.g, _matColor.b, _matColor.a);
+
+			for (int i = 0; i < _totalNum; i++)
 			{
-				_matColor = new Color(value, _matColor.g, _matColor.b, _matColor.a);
-				renderers[i].material.color = _matColor;
+				_rendererList[i].material.color = _matColor;
 			}
 		}
 		public void SetColorG(int col)
 		{
 			float value = (float)col / 127;
-			for (int i = 0; i < _hippoList.Count; i++)
+			_matColor = new Color(_matColor.r, value, _matColor.b, _matColor.a);
+
+			for (int i = 0; i < _totalNum; i++)
 			{
-				_matColor = new Color(_matColor.r, value, _matColor.b, _matColor.a);
-				renderers[i].material.color = _matColor;
+				_rendererList[i].material.color = _matColor;
 			}
 
 		}
 		public void SetColorB(int col)
 		{
 			float value = (float)col / 127;
-			for (int i = 0; i < _hippoList.Count; i++)
+			_matColor = new Color(_matColor.r, _matColor.g, value, _matColor.a);
+			
+			for (int i = 0; i < _totalNum; i++)
 			{
-				_matColor = new Color(_matColor.r, _matColor.g, value, _matColor.a);
-				renderers[i].material.color = _matColor;
+				_rendererList[i].material.color = _matColor;
 			}
 		}
 
+		/// <summary>
+		/// メッシュをキューブに変更
+		/// </summary>
+		public void changeToCube() {
+
+			if (gameObject.activeSelf && meshMode == MESH_MODE.CUBE) {
+				return;
+			}
+
+			meshMode = MESH_MODE.CUBE;
+
+			Mesh mesh = cube.GetComponent<MeshFilter>().sharedMesh;
+			for (int i = 0; i < _totalNum; i++)
+			{
+				_meshList[i].mesh = mesh;
+			}
+		}
+
+		/// <summary>
+		/// メッシュをカプセルに変更
+		/// </summary>
+		public void changeToCapsule() {
+
+			if (gameObject.activeSelf && meshMode == MESH_MODE.CAPSULE) {
+				return;
+			}
+
+			meshMode = MESH_MODE.CAPSULE;
+
+			Mesh mesh = capsule.GetComponent<MeshFilter>().sharedMesh;
+			for (int i = 0; i < _totalNum; i++)
+			{
+				_meshList[i].mesh = mesh;
+			}
+		}
+
+		/// <summary>
+		/// メッシュを球に変更
+		/// </summary>
+		public void changeToSphere() {
+
+			if (gameObject.activeSelf && meshMode == MESH_MODE.SPHERE) {
+				return;
+			}
+
+			meshMode = MESH_MODE.SPHERE;
+
+			Mesh mesh = sphere.GetComponent<MeshFilter>().sharedMesh;
+			for (int i = 0; i < _totalNum; i++)
+			{
+				_meshList[i].mesh = mesh;
+			}
+		}
 
 		/// <summary>
 		/// 整列さす
 		/// </summary>
 		public void Seiretsu()
 		{
-			if (!_isRandomLine) return;
+			if (_isMoving || seiretsuMode == SEIRETSU_MODE.KIREI) return;
 			
-			if (_isMoving) return;
 			_isMoving = true;
 
-			for (int i = 0; i < _hippoList.Count; i++)
+			for (int i = 0; i < _totalNum; i++)
 			{
-				_hippoList[i].GetComponent<HippoRotation>().Forward();
+				_hippoScripts[i].Forward();
 
-				if (i != _hippoList.Count - 1)
+				if (i != _totalNum - 1)
 					LeanTween.move(_hippoList[i], cubePositions1[i], 0.5f).setEaseOutQuint();
 				else
 					LeanTween.move(_hippoList[i], cubePositions1[i], 0.5f).setEaseOutQuint()
 					.setOnComplete(Moved);
 			}
 
-			_isRandomLine = false;
+			seiretsuMode = SEIRETSU_MODE.KIREI;
 		}
 
-		// TODO: S2M2R2でメッシュを変える
-		// TODO: SMRの3段階で並べる
+		public void Chukan()
+		{
+			if (_isMoving || seiretsuMode == SEIRETSU_MODE.AIDA) return;
+
+			_isMoving = true;
+
+			for (int i = 0; i < _totalNum; i++)
+			{
+				_hippoScripts[i].Forward();
+
+				if (i != _totalNum - 1)
+					LeanTween.move(_hippoList[i], (cubePositions1[i] + cubePosition0[i]) * .5f, 0.5f).setEaseOutQuint();
+				else
+					LeanTween.move(_hippoList[i], (cubePositions1[i] + cubePosition0[i]) * .5f, 0.5f).setEaseOutQuint()
+					.setOnComplete(Moved);
+			}
+
+			seiretsuMode = SEIRETSU_MODE.AIDA;
+		}
 
 		/// <summary>
 		/// ランダムにちらす
 		/// </summary>
 		public void Chirasu()
 		{
-			if (_isRandomLine) return;
-			
-			if (_isMoving) return;
+			if (_isMoving || seiretsuMode == SEIRETSU_MODE.KITANAI) return;
+
 			_isMoving = true;
 
-			for (int i = 0; i < _hippoList.Count; i++)
+			for (int i = 0; i < _totalNum; i++)
 			{
-				_hippoList[i].GetComponent<HippoRotation>().CancelForward();
+				_hippoScripts[i].CancelForward();
 
-				if (i != _hippoList.Count - 1)
+				if (i != _totalNum - 1)
 					LeanTween.move(_hippoList[i], cubePosition0[i], 0.7f).setEaseOutQuint();
 				else
 					LeanTween.move(_hippoList[i], cubePosition0[i], 0.7f).setEaseOutQuint()
 					.setOnComplete(Moved);
 			}
 
-			_isRandomLine = true;
+			seiretsuMode = SEIRETSU_MODE.KITANAI;
 		}
 
 
@@ -245,9 +349,9 @@ namespace vjt.hippo
 		/// </summary>
 		public void Bang()
 		{
-			for (int i = 0; i < _hippoList.Count; i++)
+			for (int i = 0; i < _totalNum; i++)
 			{
-				_hippoList[i].GetComponent<HippoRotation>().Bang();
+				_hippoScripts[i].Bang();
 			}
 		}
 	}

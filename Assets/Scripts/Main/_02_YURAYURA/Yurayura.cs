@@ -56,6 +56,8 @@ namespace  vjt.yurayura
 			_plane.transform.localScale = _planeScale;
 
 			meshRenderer = _plane.GetComponent<MeshRenderer>();
+
+			gameObject.SetActive(false);
 		}
 
 

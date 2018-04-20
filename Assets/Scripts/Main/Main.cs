@@ -110,7 +110,11 @@ namespace vjt.Main
 
 			//
 			// kumo
-			_03kumo.Init();
+			// _03kumo.Init();
+
+			//
+			// yurayura
+			_04text.Init();
 
 			//
 			// glitch
@@ -143,7 +147,7 @@ namespace vjt.Main
 					break;
 
 				case "Slider3":
-					_03kumo.SetAlpha(keyValue);
+					_rings.SetAlpha(keyValue);
 					break;
 				case "Slider4":
 					_04text.SetAlpha(keyValue);
@@ -186,8 +190,7 @@ namespace vjt.Main
 					break;
 
 				case "Knob6":
-					// TODO: 波の色相
-					_03kumo.SetColorB(keyValue);
+					_rings.SetInterval(keyValue);
 					break;
 
 				case "Knob7":
@@ -214,11 +217,23 @@ namespace vjt.Main
 					break;
 
 				case "M1":
+					_01hippo.Chukan();
+					break;
+
+				case "R1":
 					_01hippo.Seiretsu();
 					break;
 
-				case "S8":
-					_rings.Bang();
+				case "S2":
+					_01hippo.changeToCube();
+					break;
+
+				case "M2":
+					_01hippo.changeToCapsule();
+					break;
+
+				case "R2":
+					_01hippo.changeToSphere();
 					break;
 			}
 		}
@@ -246,7 +261,7 @@ namespace vjt.Main
 
 			_02yurayura.Bang();
 
-			// _rings.Bang();
+			_rings.Bang();
 		}
 	}
 }

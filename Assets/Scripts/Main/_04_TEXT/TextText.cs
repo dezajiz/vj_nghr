@@ -15,11 +15,17 @@ namespace  vjt.Text
 		/// 適用マテリアル
 		/// </summary>
 		[SerializeField] private Material _textMat;
+		
+		public void Init()
+		{
+			gameObject.SetActive(false);
+		}
 
 		/// <summary>
 		/// フェード
 		/// </summary>
 		/// <param name="midiVal"></param>
+		
 		public void SetAlpha(int midiVal)
 		{
 			//
