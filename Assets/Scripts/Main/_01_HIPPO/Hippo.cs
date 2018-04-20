@@ -84,7 +84,9 @@ namespace vjt.hippo
 		/// <summary>
 		/// 現在の整列タイプ
 		/// </summary>
-		private SEIRETSU_MODE seiretsuMode = SEIRETSU_MODE.KIREI;
+		private SEIRETSU_MODE seiretsuMode = SEIRETSU_MODE.KITANAI;
+
+		private bool globalActiveState = true;
 
 		/// <summary>
 		/// 初期化
@@ -137,7 +139,11 @@ namespace vjt.hippo
 			for (int x = 0; x < _lineNum; x++) {
 				for (int y = 0; y < _lineNum; y++) {
 					for (int z = 0; z < _lineNum; z++) {
-						cubePositions1[x * _lineNum * _lineNum + y * _lineNum + z] = new Vector3(x - _lineNum * .5f,y - _lineNum * .5f,z - _lineNum*0.5f);
+						cubePositions1[x * _lineNum * _lineNum + y * _lineNum + z] = new Vector3(
+							x - _lineNum * .5f,
+							y - _lineNum * .5f,
+							z - _lineNum * .5f
+						);
 					}
 				}
 			}
@@ -160,9 +166,12 @@ namespace vjt.hippo
 				return;
 			}
 
+			if (globalActiveState) {
+				gameObject.SetActive(true);
+			}
+
 			//
 			// アルファセット
-			gameObject.SetActive(true);
 			float value = (float)midiVal / 127;
 			_matColor = new Color(_matColor.r, _matColor.g, _matColor.b, value);
 
@@ -290,7 +299,7 @@ namespace vjt.hippo
 
 			for (int i = 0; i < _totalNum; i++)
 			{
-				_hippoScripts[i].Forward();
+				_hippoScripts[i].CancelForward();
 
 				if (i != _totalNum - 1)
 					LeanTween.move(_hippoList[i], (cubePositions1[i] + cubePosition0[i]) * .5f, 0.5f).setEaseOutQuint();
@@ -325,6 +334,16 @@ namespace vjt.hippo
 			seiretsuMode = SEIRETSU_MODE.KITANAI;
 		}
 
+		public void ChangeActiveState(float _posX) {
+			globalActiveState = !globalActiveState;
+			gameObject.SetActive(globalActiveState);
+
+			if (globalActiveState) {
+				LeanTween.move(gameObject, new Vector3(_posX, 0, 0), 0.7f).setEaseOutQuint();
+			} else {
+				gameObject.transform.localPosition = new Vector3(-2.5f, 0, 0);
+			}
+		}
 
 		/// <summary>
 		/// 
