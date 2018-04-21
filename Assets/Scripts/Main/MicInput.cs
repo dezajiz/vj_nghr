@@ -37,15 +37,11 @@ public class MicInput : MonoBehaviour
 			//Name: Built-in Microphone
 			//Name: Philips SHB5900
 			//Name: USB2.0 MIC
-			audio_.clip = Microphone.Start("USB PnP Sound Device", true, 10, 44100);
+			audio_.clip = Microphone.Start("USB PnP Sound Device", false, 1800, 44100);
 			// audio_.clip = Microphone.Start(null, true, 10, 44100);
             // マイクが Ready になるまで待機（一瞬）
-            while (Microphone.GetPosition(null) <= 0) {}
-			
+            // while (Microphone.GetPosition(null) <= 0) {}	
         }
-		else
-		{
-		}
 		audio_.Play();
     }
 
