@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-using vjt.hippo;
-using vjt.yurayura;
-using vjt.kumo;
 using vjt.blur;
 using vjt.glitch;
-using vjt.rings;
-using vjt.Text;
-
 namespace vjt.Main
 {
 	/* 
@@ -41,31 +35,6 @@ namespace vjt.Main
 		/// </summary>
 		[SerializeField] private MicInput _micInput;
 
-
-		/// <summary>
-		/// 01 hippo
-		/// </summary>
-		[SerializeField] private Hippo _01hippo1;
-		[SerializeField] private Hippo _01hippo2;
-		[SerializeField] private Hippo _01hippo3;
-
-
-		/// <summary>
-		/// 02 yurayura
-		/// </summary>
-		[SerializeField] private Yurayura _02yurayura;
-
-
-		/// <summary>
-		/// 03 kumo
-		/// </summary>
-		[SerializeField] private KumoKumo _03kumo;
-
-		/// <summary>
-		/// 04 Text
-		/// </summary>
-		[SerializeField] private TextText _04text;
-
 		/// <summary>
 		/// 07 blur
 		/// </summary>
@@ -76,13 +45,6 @@ namespace vjt.Main
 		/// 00 glitch
 		/// </summary>
 		[SerializeField] private GlitchController _00glitch;
-
-
-		/// <summary>
-		/// rings
-		/// </summary>
-		[SerializeField] private RingsController _rings;
-
 
 		/// <summary>
 		/// Start
@@ -95,45 +57,15 @@ namespace vjt.Main
 			_nanoKon.keyPushedFunctions.Add (nanoKontrol2_keyPushed);
 
 			//
-			// マイク入力
-			_micInput.onBang = Bang;
-
-			//
 			// ブラー
 			_07blur.Init();
-
-			//
-			// ヒッポ
-			_01hippo1.Init();
-			_01hippo2.Init();
-			_01hippo3.Init();
-
-			//
-			// yurayura
-			_02yurayura.Init();
-
-			//
-			// kumo
-			// _03kumo.Init();
-
-			//
-			// yurayura
-			_04text.Init();
 
 			//
 			// glitch
 			_00glitch.Init();
 
-			//
-			// rings
-			_rings.Init();
-
 			// 同時Tweenの制限を増やす
 			LeanTween.init(1500);
-
-			// 2と3はボタンを押すまで非活性
-			_01hippo2.ChangeActiveState(0.0f);
-			_01hippo3.ChangeActiveState(0.0f);
 		}
 
 
@@ -150,20 +82,14 @@ namespace vjt.Main
 			switch (keyName)
 			{
 				case "Slider1":
-					_01hippo1.SetAlpha(keyValue);
-					_01hippo2.SetAlpha(keyValue);
-					_01hippo3.SetAlpha(keyValue);
 					break;
 
 				case "Slider2":
-					_02yurayura.SetAlpha(keyValue);
 					break;
 
 				case "Slider3":
-					_rings.SetAlpha(keyValue);
 					break;
 				case "Slider4":
-					_04text.SetAlpha(keyValue);
 					break;
 				case "Slider5":
 					_00glitch.SetColorDrift(keyValue);
@@ -183,33 +109,21 @@ namespace vjt.Main
 
 
 				case "Knob1":
-					_01hippo1.SetColorR(keyValue);
-					_01hippo2.SetColorR(keyValue);
-					_01hippo3.SetColorR(keyValue);
 					break;
 
 				case "Knob2":
-					_01hippo1.SetColorG(keyValue);
-					_01hippo2.SetColorG(keyValue);
-					_01hippo3.SetColorG(keyValue);
 					break;
 
 				case "Knob3":
-					_01hippo1.SetColorB(keyValue);
-					_01hippo2.SetColorB(keyValue);
-					_01hippo3.SetColorB(keyValue);
 					break;
 
 				case "Knob4":
-					_02yurayura.SetColor(_nanoKon.knob4);
 					break;
 
 				case "Knob5":
-					_02yurayura.SetFineness(keyValue);
 					break;
 
 				case "Knob6":
-					_rings.SetInterval(keyValue);
 					break;
 
 				case "Knob7":
@@ -232,46 +146,27 @@ namespace vjt.Main
 			switch (keyName)
 			{
 				case "S1":
-					_01hippo1.Chirasu();
-					_01hippo2.Chirasu();
-					_01hippo3.Chirasu();
 					break;
 
 				case "M1":
-					_01hippo1.Chukan();
-					_01hippo2.Chukan();
-					_01hippo3.Chukan();
 					break;
 
 				case "R1":
-					_01hippo1.Seiretsu();
-					_01hippo2.Seiretsu();
-					_01hippo3.Seiretsu();
 					break;
 
 				case "S2":
-					_01hippo1.changeToCube();
-					_01hippo2.changeToCube();
-					_01hippo3.changeToCube();
 					break;
 
 				case "M2":
-					_01hippo1.changeToCapsule();
-					_01hippo2.changeToCapsule();
-					_01hippo3.changeToCapsule();
 					break;
 
 				case "R2":
-					_01hippo1.changeToSphere();
-					_01hippo2.changeToSphere();
-					_01hippo3.changeToSphere();
+
 					break;
 
 				case "S3":
-					_01hippo2.ChangeActiveState(-2.5f);
 					break;
 				case "M3":
-					_01hippo3.ChangeActiveState(2.5f);
 					break;
 			}
 		}
@@ -287,21 +182,6 @@ namespace vjt.Main
 			//Debug.Log (nanoKontrol2.knob1);
 			//Debug.Log (nanoKontrol2.knob2);
 
-		}
-
-
-		/// <summary>
-		/// バスドラのBang
-		/// </summary>
-		private void Bang()
-		{
-			_01hippo1.Bang();
-			_01hippo2.Bang();
-			_01hippo3.Bang();
-
-			_02yurayura.Bang();
-
-			_rings.Bang();
 		}
 	}
 }
